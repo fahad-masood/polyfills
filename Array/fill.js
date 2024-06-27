@@ -2,8 +2,6 @@
 
 // fill Polyfill implementation, I have named it as "customFill":
 
-// const arr = [1, 2, 3, 4];
-
 Array.prototype.customFill = function (value, start = 0, end = this.length) {
   // Handle negative start
   if (start < 0) {
@@ -25,8 +23,6 @@ Array.prototype.customFill = function (value, start = 0, end = this.length) {
 
   return this;
 };
-
-// console.log(arr.fill(5));
 
 console.log([1, 2, 3].customFill(4)); // [4, 4, 4]
 console.log([1, 2, 3].customFill(4, 1)); // [1, 4, 4]
