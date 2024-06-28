@@ -7,7 +7,7 @@ Array.prototype.customFind = function (cb, thisArg) {
   for (let i = 0; i < this.length; i++) {
     // Check if the callback function returns true for the current element
     // If so, return the current element
-    if (cb(this[i], i, this || thisArg)) {
+    if (cb.call(thisArg, this[i], i, this)) {
       return this[i];
     }
   }
