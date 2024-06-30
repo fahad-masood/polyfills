@@ -25,7 +25,7 @@ Array.prototype.customJoin = function (separator = ",") {
     }
   }
 
-  // Return the final joined string
+  // Return the result string
   return resultString;
 };
 
