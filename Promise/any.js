@@ -4,20 +4,38 @@
 
 Promise.customAny = function (promise) {
   return new Promise((resolve, reject) => {
+    // Check if the input is an array
     if (!Array.isArray(promise)) {
       return reject(new TypeError("Promises should be iterable"));
     }
+
+    let results = [];
+    let count = 0;
+
+    // Handle case where no promises are provided
     if (promise.length === 0) {
-      return reject("All promises were rejected");
+      return reject(
+        new AggregateError(results, "All the promises are rejected")
+      );
     }
+
+    // Iterate through each promise in the array
     for (let i = 0; i < promise.length; i++) {
       promise[i]
         .then((result) => {
-          return resolve(result);
+          // Resolve with the first successful promise encountered
+          resolve(result);
         })
         .catch((error) => {
-          if (i === promise.length) {
-            return reject("All promises were rejected");
+          // Store the error and count rejections
+          results[i] = error;
+          count++;
+
+          // If all promises are rejected, reject with an AggregateError
+          if (count === promise.length) {
+            reject(
+              new AggregateError(results, "All the promises are rejected")
+            );
           }
         });
     }
@@ -25,9 +43,9 @@ Promise.customAny = function (promise) {
 };
 
 const promise1 = Promise.reject(0);
-const promise2 = new Promise((resolve) => setTimeout(resolve, 100, "quick"));
+const promise2 = new Promise((resolve) => setTimeout(resolve, 200, "quick"));
 const promise3 = new Promise((resolve) => setTimeout(resolve, 500, "slow"));
 
-const promises = [];
+const promises = [promise1, promise2, promise3];
 
 Promise.customAny(promises).then((value) => console.log(value));
